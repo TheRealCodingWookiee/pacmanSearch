@@ -382,11 +382,29 @@ def cornersHeuristic(state, problem):
     shortest path from the state to a goal of the problem; i.e.  it should be
     admissible (as well as consistent).
     """
-    corners = problem.corners # These are the corner coordinates
-    walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
+    corners = list(state[1])  # These are the corner coordinates
+    walls = problem.walls  # These are the walls of the maze, as a Grid (game.py)
+    #Funktion zur Berechnung der Manhattan Distance
+    manhattanDistance = lambda x1,x2,y1,y2: (abs(x1-x2) + abs(y1-y2))
+    actualPosition = state[0]
+    heuristics = 0
 
-    "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    while corners != []:
+
+        #aktuellePosition in zwei Variablen aufteilen
+        x1,y1 = actualPosition
+        #Leere Liste fuer Distanzen
+        distance = []
+        #fuer alle unbesuchten Ecken
+        for x2,y2 in corners:
+            #Berechnete ManhattanDistanz zu Liste von Distanzen hinzufuegen
+            distance.append(manhattanDistance(x1,x2,y1,y2))
+        #kleinste Distanz zu naechsten Ecke
+        heuristics = heuristics + min(distance)
+        #actualPosition zeigt jetzt auf die naheste Ecke
+        actualPosition = corners[distance.index(min(distance))]
+        corners.remove(actualPosition)
+    return heuristics # Default to trivial solution
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
