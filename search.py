@@ -95,21 +95,23 @@ def graphSearch(problem, structure):
         # Für die Rekursion des Weges
         path = structure.pop()
 
-        # Weist Position aus path dem curr_state zu
+        # Weist Position aus path dem currentPosition zu
         # Mit [-1] kriegt es das ganze letzte Element aus path, mit [0] die Position aus dem structure Format
 
-        curr_state = path[-1][0]
+        currentPosition = path[-1][0]
+        succesorsOfCurrentPosition = problem.getSuccessors(currentPosition)
 
-        # Wenn curr_state das Ziel ist, dann return die Richtung in die Pacman sich bewegen muss
+
+        # Wenn currentPosition das Ziel ist, dann return die Richtung in die Pacman sich bewegen muss
         # [1:] schließt den ersten Eintrag aus ("Stop")
-        if problem.isGoalState(curr_state):
+        if problem.isGoalState(currentPosition):
             return [x[1] for x in path][1:]
 
-        # Wenn curr_state nicht in visited, dann curr_state in visited hinzufügen
-        if curr_state not in visited:
-            visited.append(curr_state)
+        # Wenn currentPosition nicht in visited, dann currentPosition in visited hinzufügen
+        if currentPosition not in visited:
+            visited.append(currentPosition)
 
-            for successor in problem.getSuccessors(curr_state):
+            for successor in succesorsOfCurrentPosition:
                 # successor[0] = (position, richtung, kosten)[0] = position
                 if successor[0] not in visited:
                     # Elternweg
@@ -126,10 +128,6 @@ def depthFirstSearch(problem):
 
     stack = util.Stack()
     return graphSearch(problem, stack)
-
-
-
-
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
