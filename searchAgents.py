@@ -390,9 +390,20 @@ def cornersHeuristic(state, problem):
     actualPosition = state[0]
     heuristics = 0
 
-    for pos in set(corners) ^ set(state[1]):
-        heuristics = max(heuristics, mazeDistance(actualPosition, pos, problem.startingGameState))
-    return heuristics  # Default to trivial solution
+    while corners != []:
+        #Leere Liste fuer Distanzen
+        distance = []
+        #fuer alle unbesuchten Ecken
+        for x2,y2 in corners:
+            goalPosition = x2, y2
+            #Berechnete ManhattanDistanz zu Liste von Distanzen hinzufuegen
+            distance.append(util.manhattanDistance(actualPosition, goalPosition))
+        #kleinste Distanz zu naechsten Ecke
+        heuristics = heuristics + min(distance)
+        #actualPosition zeigt jetzt auf die naheste Ecke
+        actualPosition = corners[distance.index(min(distance))]
+        corners.remove(actualPosition)
+    return heuristics
 
 
 class AStarCornersAgent(SearchAgent):
